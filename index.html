@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Акбаршох · 14 лет 🎉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700;900&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #ff4fa3; --orange: #ff9f1c; --yellow: #ffe14d;
+    --lime: #7cff6b; --cyan: #3de0ff; --violet: #9b5cff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Nunito", "Segoe UI", sans-serif;
+    background: #0d0726;
+    color: #fff;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ===== Живой фон из цветных пятен ===== */
+  .blobs { position: fixed; inset: 0; z-index: -2; overflow: hidden; filter: blur(80px); opacity: .75; }
+  .blob { position: absolute; width: 45vmax; height: 45vmax; border-radius: 50%; mix-blend-mode: screen; }
+  .b1 { background: var(--pink);   top: -10%; left: -10%; animation: drift1 18s ease-in-out infinite alternate; }
+  .b2 { background: var(--violet); top: 30%;  right: -15%; animation: drift2 22s ease-in-out infinite alternate; }
+  .b3 { background: var(--cyan);   bottom: -20%; left: 20%; animation: drift3 20s ease-in-out infinite alternate; }
+  .b4 { background: var(--orange); top: 50%; left: -20%; width: 30vmax; height: 30vmax; animation: drift2 16s ease-in-out infinite alternate-reverse; }
+  @keyframes drift1 { to { transform: translate(30vw, 20vh) scale(1.2); } }
+  @keyframes drift2 { to { transform: translate(-25vw, -15vh) scale(.8); } }
+  @keyframes drift3 { to { transform: translate(15vw, -30vh) scale(1.3); } }
+  .grain { position: fixed; inset: 0; z-index: -1;
+    background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px);
+    background-size: 22px 22px; }
+
+  canvas#fx { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+
+  /* ===== Заставка ===== */
+  #intro {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+    background: radial-gradient(circle, #2b0d5c, #0d0726 70%);
+    transition: opacity .8s, visibility .8s;
+  }
+  #intro.hide { opacity: 0; visibility: hidden; }
+  #intro .gift-ico { font-size: 7rem; animation: wobble 1.4s ease-in-out infinite; cursor: pointer; filter: drop-shadow(0 0 30px var(--pink)); }
+  #intro p { font-size: 1.3rem; letter-spacing: 2px; opacity: .85; }
+  @keyframes wobble { 0%,100% { transform: rotate(-8deg) scale(1); } 50% { transform: rotate(8deg) scale(1.1); } }
+
+  /* ===== Герой ===== */
+  .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
+  .hb { font-family: "Pacifico", cursive; font-size: clamp(1.8rem, 5vw, 3rem);
+    background: linear-gradient(90deg, var(--yellow), var(--orange), var(--pink));
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  .orbit-wrap { position: relative; width: min(80vw, 420px); aspect-ratio: 1; margin: 10px 0; display: grid; place-items: center; }
+  .num {
+    font-family: "Rubik Mono One", sans-serif;
+    font-size: clamp(7rem, 26vw, 13rem); line-height: 1; color: var(--yellow);
+    text-shadow: 4px 4px 0 var(--orange), 8px 8px 0 var(--pink), 12px 12px 0 var(--violet), 16px 16px 0 var(--cyan), 0 0 60px rgba(255,225,77,.6);
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-14px) rotate(4deg); } }
+  .ring { position: absolute; inset: 0; animation: spin 20s linear infinite; }
+  .ring span { position: absolute; left: 50%; top: 50%; font-size: 2.2rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .ring span i { display: inline-block; font-style: normal; animation: spin 20s linear infinite reverse; }
+
+  .name { font-family: "Rubik Mono One", sans-serif; font-size: clamp(2rem, 8vw, 4.8rem); letter-spacing: 4px; margin-top: 10px; }
+  .name span { display: inline-block; animation: wave 1.8s ease-in-out infinite; }
+  @keyframes wave { 0%,100% { transform: translateY(0); } 40% { transform: translateY(-22px) rotate(-6deg); } }
+  .tag { margin-top: 18px; font-size: 1.2rem; opacity: .9; }
+  .scroll { margin-top: 40px; font-size: 2rem; animation: bounce 1.5s infinite; text-decoration: none; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
+
+  /* ===== Общие секции ===== */
+  section { max-width: 1050px; margin: 0 auto; padding: 70px 20px; text-align: center; }
+  .title {
+    font-family: "Pacifico", cursive; font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 36px;
+    background: linear-gradient(90deg, var(--cyan), var(--lime), var(--yellow));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .glass {
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.18);
+    border-radius: 28px; padding: 36px; backdrop-filter: blur(14px);
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  }
+  .btn {
+    font-family: inherit; font-weight: 900; font-size: 1.05rem; color: #1a0638;
+    border: none; padding: 14px 28px; border-radius: 40px; cursor: pointer; margin: 8px;
+    background: linear-gradient(90deg, var(--yellow), var(--orange), var(--pink), var(--violet), var(--yellow));
+    background-size: 300%; animation: btnflow 6s linear infinite;
+    box-shadow: 0 8px 25px rgba(255,79,163,.45); transition: transform .15s;
+  }
+  .btn:hover { transform: translateY(-3px) scale(1.05); }
+  .btn.alt { background: rgba(255,255,255,.12); color: #fff; box-shadow: none; border: 1px solid rgba(255,255,255,.3); animation: none; }
+  @keyframes btnflow { to { background-position: 300%; } }
+
+  /* ===== Цифры ===== */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 20px; }
+  .stat { border-radius: 24px; padding: 28px 18px; color: #1a0638; transform: rotate(var(--r)); transition: transform .3s; }
+  .stat:hover { transform: rotate(0) scale(1.06); }
+  .stat b { display: block; font-family: "Rubik Mono One", sans-serif; font-size: 1.7rem; margin-bottom: 6px; }
+  .s1 { background: linear-gradient(135deg, var(--yellow), var(--orange)); --r: -3deg; }
+  .s2 { background: linear-gradient(135deg, var(--cyan), var(--lime)); --r: 2deg; }
+  .s3 { background: linear-gradient(135deg, var(--pink), var(--violet)); --r: -2deg; color: #fff; }
+  .s4 { background: linear-gradient(135deg, var(--lime), var(--yellow)); --r: 3deg; }
+
+  /* ===== Торт ===== */
+  .cake { position: relative; width: 300px; height: 300px; margin: 10px auto 20px; }
+  .plate { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 340px; height: 26px; border-radius: 50%;
+    background: linear-gradient(#fff, #c9c3ff); box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+  .tier { position: absolute; left: 50%; transform: translateX(-50%); border-radius: 16px 16px 10px 10px; overflow: hidden; }
+  .tier::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 22px;
+    background: radial-gradient(circle at 12px 0, #fff 11px, transparent 12px) 0 0 / 24px 22px repeat-x, linear-gradient(#fff 8px, transparent 8px); }
+  .t1 { bottom: 14px; width: 290px; height: 95px; background: linear-gradient(90deg, #ff4fa3, #ff7ab8, #ff4fa3); }
+  .t2 { bottom: 104px; width: 230px; height: 80px; background: linear-gradient(90deg, #ffb703, #ffe14d, #ffb703); }
+  .t3 { bottom: 179px; width: 170px; height: 65px; background: linear-gradient(90deg, #3de0ff, #9ff3ff, #3de0ff); }
+  .sprinkle { position: absolute; width: 4px; height: 11px; border-radius: 3px; }
+  .candles { position: absolute; bottom: 240px; left: 50%; transform: translateX(-50%); display: flex; gap: 3px; }
+  .candle { width: 8px; height: 36px; border-radius: 3px; position: relative; cursor: pointer; }
+  .flame { position: absolute; top: -20px; left: 50%; width: 11px; height: 18px; margin-left: -5.5px;
+    background: radial-gradient(circle at 50% 70%, #fff 15%, #ffe14d 40%, #ff7b00 75%);
+    border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+    box-shadow: 0 0 14px 4px rgba(255,190,60,.7);
+    animation: flick .25s infinite alternate; transform-origin: bottom center; }
+  @keyframes flick { to { transform: scale(1.1, .88) rotate(3deg); } }
+  .candle.out .flame { animation: none; opacity: 0; transform: scale(0); transition: .3s; }
+  .smoke { position: absolute; top: -20px; left: 50%; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%;
+    background: rgba(220,220,220,.7); animation: smoke 1.2s forwards; }
+  @keyframes smoke { to { transform: translate(8px, -50px) scale(4); opacity: 0; } }
+  #cakeMsg { font-size: 1.3rem; min-height: 34px; margin-top: 10px; font-weight: 700; }
+  .hint { opacity: .7; font-size: .95rem; margin-bottom: 8px; }
+
+  /* ===== Карточки-перевёртыши ===== */
+  .flips { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 22px; }
+  .flip { perspective: 1000px; height: 220px; cursor: pointer; }
+  .flip-in { position: relative; width: 100%; height: 100%; transition: transform .7s cubic-bezier(.4,1.6,.5,1); transform-style: preserve-3d; }
+  .flip:hover .flip-in, .flip.on .flip-in { transform: rotateY(180deg); }
+  .face { position: absolute; inset: 0; border-radius: 24px; backface-visibility: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+  .front { background: var(--g); }
+  .front .e { font-size: 4rem; filter: drop-shadow(0 6px 10px rgba(0,0,0,.3)); }
+  .front h3 { margin-top: 10px; font-size: 1.3rem; font-weight: 900; color: #1a0638; }
+  .back { background: #1c0f45; border: 2px solid; border-image: var(--g) 1; transform: rotateY(180deg); font-size: 1.1rem; line-height: 1.5; }
+
+  /* ===== Подарок ===== */
+  .gift { position: relative; width: 170px; height: 170px; margin: 60px auto 30px; cursor: pointer; }
+  .box { position: absolute; bottom: 0; width: 170px; height: 120px; border-radius: 10px;
+    background: linear-gradient(90deg, transparent 72px, var(--yellow) 72px 98px, transparent 98px), linear-gradient(135deg, var(--pink), var(--violet)); }
+  .lid { position: absolute; bottom: 112px; left: -10px; width: 190px; height: 38px; border-radius: 8px;
+    background: linear-gradient(90deg, transparent 82px, var(--yellow) 82px 108px, transparent 108px), linear-gradient(135deg, #ff74b8, #b07cff);
+    transition: transform .8s cubic-bezier(.3,1.6,.5,1); z-index: 2; }
+  .lid::before, .lid::after { content: ""; position: absolute; top: -32px; width: 44px; height: 36px; border: 9px solid var(--yellow); border-radius: 50% 50% 0 50%; }
+  .lid::before { left: 46px; transform: rotate(-20deg); }
+  .lid::after  { right: 46px; transform: scaleX(-1) rotate(-20deg); }
+  .gift:not(.open) { animation: shake 2.2s ease-in-out infinite; }
+  @keyframes shake { 0%,80%,100% { transform: rotate(0); } 85% { transform: rotate(-6deg); } 90% { transform: rotate(6deg); } 95% { transform: rotate(-4deg); } }
+  .gift.open .lid { transform: translateY(-120px) rotate(-25deg); }
+  #fortune { font-size: 1.35rem; font-weight: 700; min-height: 70px; line-height: 1.5; transition: transform .4s; }
+  #fortune.pop { animation: popin .6s cubic-bezier(.3,1.8,.5,1); }
+  @keyframes popin { from { transform: scale(0); } }
+
+  /* ===== Письмо ===== */
+  .letter { text-align: left; font-size: 1.2rem; line-height: 1.8; min-height: 240px; white-space: pre-wrap; }
+  .letter::after { content: "▌"; animation: blink 1s steps(1) infinite; color: var(--pink); }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ===== Шарики ===== */
+  .balloon { position: fixed; bottom: -140px; width: 62px; height: 78px; border-radius: 50% 50% 48% 48%;
+    background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.85) 0 8%, var(--c) 30%, color-mix(in srgb, var(--c) 70%, #000) 100%);
+    cursor: pointer; z-index: 40; animation: rise linear forwards; }
+  .balloon::before { content: ""; position: absolute; bottom: -7px; left: 50%; margin-left: -6px;
+    border: 6px solid transparent; border-bottom-color: var(--c); transform: rotate(180deg); }
+  .balloon::after { content: ""; position: absolute; top: 84px; left: 50%; width: 1.5px; height: 70px; background: rgba(255,255,255,.5); }
+  @keyframes rise { 0% { transform: translateY(0) translateX(0) rotate(-5deg); }
+    50% { transform: translateY(-60vh) translateX(30px) rotate(5deg); }
+    100% { transform: translateY(-125vh) translateX(-20px) rotate(-5deg); } }
+  .counter { position: fixed; right: 18px; bottom: 18px; z-index: 60; background: rgba(0,0,0,.45); backdrop-filter: blur(8px);
+    padding: 10px 18px; border-radius: 30px; font-weight: 700; border: 1px solid rgba(255,255,255,.2); }
+
+  .sparkle { position: fixed; pointer-events: none; z-index: 70; font-size: 14px; animation: sp 0.9s forwards; }
+  @keyframes sp { to { transform: translateY(30px) scale(0) rotate(180deg); opacity: 0; } }
+
+  .reveal { opacity: 0; transform: translateY(50px); transition: 1s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  footer { text-align: center; padding: 50px 20px 90px; font-family: "Pacifico", cursive; font-size: 1.4rem; }
+</style>
+</head>
+<body>
+<div class="blobs"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div></div>
+<div class="grain"></div>
+<canvas id="fx"></canvas>
+
+<div id="intro">
+  <div class="gift-ico" id="introGift">🎁</div>
+  <p>Нажми на подарок, Акбаршох 👆</p>
+</div>
+
+<header class="hero">
+  <div class="hb">С днём рождения!</div>
+  <div class="orbit-wrap">
+    <div class="ring" id="ring"></div>
+    <div class="num">14</div>
+  </div>
+  <div class="name" id="name"></div>
+  <p class="tag">Сегодня, 11 ноября, тебе исполняется 14 — и весь этот сайт только для тебя ✨</p>
+  <div><button class="btn" id="fireBtn">🎆 Салют!</button></div>
+  <a href="#stats" class="scroll">⬇️</a>
+</header>
+
+<section id="stats" class="reveal">
+  <h2 class="title">14 лет в цифрах</h2>
+  <div class="stats">
+    <div class="stat s1"><b data-to="5113">0</b>дней на этой планете</div>
+    <div class="stat s2"><b data-to="122712">0</b>часов приключений</div>
+    <div class="stat s3"><b data-to="589000000">0</b>ударов сердца (примерно 😄)</div>
+    <div class="stat s4"><b>∞</b>улыбок и шуток</div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="title">Задуй 14 свечей</h2>
+  <div class="glass">
+    <p class="hint">Загадай желание и задуй свечи: кликай по ним или дуй в микрофон 🎤</p>
+    <div class="cake" id="cake">
+      <div class="plate"></div>
+      <div class="tier t1"></div><div class="tier t2"></div><div class="tier t3"></div>
+      <div class="candles" id="candles"></div>
+    </div>
+    <button class="btn" id="blowAll">💨 Задуть все</button>
+    <button class="btn alt" id="micBtn">🎤 Задуть по-настоящему</button>
+    <button class="btn alt" id="relight">🔥 Зажечь снова</button>
+    <div id="cakeMsg"></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="title">Пожелания</h2>
+  <p class="hint" style="margin-top:-20px;margin-bottom:26px">Наведи или нажми на карточку</p>
+  <div class="flips" id="flips"></div>
+</section>
+
+<section class="reveal">
+  <h2 class="title">Секретный подарок</h2>
+  <div class="glass">
+    <div class="gift" id="gift"><div class="lid"></div><div class="box"></div></div>
+    <div id="fortune">Открой коробку и узнай, что ждёт тебя в 14 лет!</div>
+  </div>
+</section>
+
+<section class="reveal" id="letterSec">
+  <h2 class="title">Письмо для тебя</h2>
+  <div class="glass"><div class="letter" id="letter"></div></div>
+</section>
+
+<footer>С любовью для Акбаршоха 💖 · 11.11.2026</footer>
+<div class="counter">🎈 Лопнуто: <span id="popped">0</span></div>
+
+<script>
+const rand = (a, b) => Math.random() * (b - a) + a;
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const COLORS = ['#ff4fa3', '#ff9f1c', '#ffe14d', '#7cff6b', '#3de0ff', '#9b5cff', '#ffffff'];
+
+/* ===== Частицы: салют + конфетти ===== */
+const cv = document.getElementById('fx'), cx = cv.getContext('2d');
+let P = [];
+const fit = () => { cv.width = innerWidth; cv.height = innerHeight; };
+addEventListener('resize', fit); fit();
+function confetti(n = 200) {
+  for (let i = 0; i < n; i++) P.push({ t: 'c', x: rand(0, cv.width), y: rand(-cv.height * .6, -10), vx: rand(-1.5, 1.5), vy: rand(2, 5),
+    w: rand(6, 12), h: rand(4, 8), r: rand(0, 6), vr: rand(-.2, .2), c: pick(COLORS), life: 1 });
+}
+function firework(x = rand(cv.width * .15, cv.width * .85), y = rand(cv.height * .1, cv.height * .45)) {
+  const c = pick(COLORS), n = 90;
+  for (let i = 0; i < n; i++) {
+    const a = (Math.PI * 2 * i) / n, s = rand(2, 6.5);
+    P.push({ t: 'f', x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, c: Math.random() < .2 ? '#fff' : c, life: 1, d: rand(.008, .018) });
+  }
+}
+function show(n = 5) { for (let i = 0; i < n; i++) setTimeout(() => firework(), i * 280); }
+(function loop() {
+  cx.clearRect(0, 0, cv.width, cv.height);
+  P = P.filter(p => p.life > 0 && p.y < cv.height + 30);
+  for (const p of P) {
+    if (p.t === 'c') {
+      p.x += p.vx + Math.sin(p.y / 40); p.y += p.vy; p.r += p.vr;
+      cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.fillStyle = p.c; cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); cx.restore();
+    } else {
+      p.vx *= .98; p.vy = p.vy * .98 + .06; p.x += p.vx; p.y += p.vy; p.life -= p.d;
+      cx.globalAlpha = Math.max(p.life, 0); cx.fillStyle = p.c;
+      cx.beginPath(); cx.arc(p.x, p.y, 2.6, 0, Math.PI * 2); cx.fill(); cx.globalAlpha = 1;
+    }
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* ===== Заставка ===== */
+document.getElementById('introGift').onclick = () => {
+  document.getElementById('intro').classList.add('hide');
+  confetti(300); show(6); startBalloons();
+};
+
+/* ===== Имя с волной и орбита эмодзи ===== */
+const nameEl = document.getElementById('name');
+[...'АКБАРШОХ'].forEach((ch, i) => {
+  const s = document.createElement('span');
+  s.textContent = ch; s.style.color = COLORS[i % 6]; s.style.animationDelay = i * 0.12 + 's';
+  s.style.textShadow = `0 0 25px ${COLORS[i % 6]}`;
+  nameEl.appendChild(s);
+});
+const ring = document.getElementById('ring'), em = ['🎈', '🎂', '⭐', '🎁', '🎉', '🍰', '🚀', '🎮', '⚽', '💎', '🔥', '🌈'];
+em.forEach((e, i) => {
+  const a = (i / em.length) * 360;
+  const s = document.createElement('span');
+  s.style.transform = `translate(-50%,-50%) rotate(${a}deg) translateY(calc(-1 * min(38vw, 195px))) rotate(${-a}deg)`;
+  s.innerHTML = `<i>${e}</i>`;
+  ring.appendChild(s);
+});
+document.getElementById('fireBtn').onclick = () => { show(7); confetti(120); };
+
+/* ===== Появление секций + счётчики ===== */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add('in');
+  e.target.querySelectorAll('[data-to]').forEach(countUp);
+  if (e.target.id === 'letterSec') typeLetter();
+  io.unobserve(e.target);
+}), { threshold: .25 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+function countUp(el) {
+  const to = +el.dataset.to, t0 = performance.now(), dur = 2200;
+  (function step(t) {
+    const k = Math.min((t - t0) / dur, 1), v = Math.floor(to * (1 - Math.pow(1 - k, 3)));
+    el.textContent = v.toLocaleString('ru-RU');
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+
+/* ===== Торт ===== */
+document.querySelectorAll('.tier').forEach(t => {
+  for (let i = 0; i < 26; i++) {
+    const s = document.createElement('div'); s.className = 'sprinkle';
+    s.style.left = rand(4, 96) + '%'; s.style.top = rand(30, 85) + '%';
+    s.style.background = pick(COLORS); s.style.transform = `rotate(${rand(0, 180)}deg)`;
+    t.appendChild(s);
+  }
+});
+const candleBox = document.getElementById('candles'), cakeMsg = document.getElementById('cakeMsg');
+const candleColors = ['#ff4fa3', '#ffe14d', '#3de0ff', '#7cff6b', '#9b5cff', '#ff9f1c'];
+for (let i = 0; i < 14; i++) {
+  const c = document.createElement('div'); c.className = 'candle';
+  const col = candleColors[i % 6];
+  c.style.background = `repeating-linear-gradient(45deg, #fff 0 4px, ${col} 4px 8px)`;
+  c.innerHTML = '<div class="flame"></div>';
+  c.onclick = () => blow(c);
+  candleBox.appendChild(c);
+}
+function blow(c) {
+  if (c.classList.contains('out')) return;
+  c.classList.add('out');
+  const sm = document.createElement('div'); sm.className = 'smoke'; c.appendChild(sm); setTimeout(() => sm.remove(), 1200);
+  const left = document.querySelectorAll('.candle:not(.out)').length;
+  cakeMsg.textContent = left ? `Осталось свечей: ${left} 🕯️` : '';
+  if (!left) {
+    cakeMsg.textContent = '🎉 Ура! Желание загадано и обязательно сбудется! 🌟';
+    show(8); confetti(250);
+  }
+}
+document.getElementById('blowAll').onclick = () => document.querySelectorAll('.candle:not(.out)').forEach((c, i) => setTimeout(() => blow(c), i * 90));
+document.getElementById('relight').onclick = () => { document.querySelectorAll('.candle').forEach(c => c.classList.remove('out')); cakeMsg.textContent = ''; };
+document.getElementById('micBtn').onclick = async function () {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const ac = new AudioContext(), an = ac.createAnalyser(); an.fftSize = 512;
+    ac.createMediaStreamSource(stream).connect(an);
+    const data = new Uint8Array(an.frequencyBinCount);
+    this.textContent = '🎤 Дуй сильнее!';
+    let last = 0;
+    (function listen(t) {
+      an.getByteFrequencyData(data);
+      const vol = data.reduce((a, b) => a + b, 0) / data.length;
+      if (vol > 55 && t - last > 120) { const c = document.querySelector('.candle:not(.out)'); if (c) blow(c); last = t; }
+      if (document.querySelector('.candle:not(.out)')) requestAnimationFrame(listen);
+      else { stream.getTracks().forEach(tr => tr.stop()); ac.close(); }
+    })(0);
+  } catch (e) {
+    cakeMsg.textContent = 'Микрофон недоступен — кликай по свечам 😉';
+  }
+};
+
+/* ===== Карточки пожеланий ===== */
+const wishes = [
+  ['💪', 'Здоровье', 'Пусть энергии хватает на всё: спорт, учёбу, друзей и ночные катки!', 'linear-gradient(135deg,#ffe14d,#ff9f1c)'],
+  ['🧠', 'Знания', 'Лёгкой учёбы, пятёрок без стресса и интереса ко всему новому.', 'linear-gradient(135deg,#3de0ff,#7cff6b)'],
+  ['🤝', 'Друзья', 'Настоящих друзей, которые всегда рядом — и в веселье, и в трудный момент.', 'linear-gradient(135deg,#ff4fa3,#ff9f1c)'],
+  ['🚀', 'Мечты', 'Ставь большие цели и не бойся — у тебя всё получится!', 'linear-gradient(135deg,#9b5cff,#3de0ff)'],
+  ['😄', 'Радость', 'Побольше смеха, крутых моментов и приятных сюрпризов каждый день.', 'linear-gradient(135deg,#7cff6b,#ffe14d)'],
+  ['🏆', 'Победы', 'Пусть каждая игра, матч и испытание заканчиваются твоей победой!', 'linear-gradient(135deg,#ff9f1c,#ff4fa3)']
+];
+const flips = document.getElementById('flips');
+wishes.forEach(([e, h, txt, g]) => {
+  const d = document.createElement('div'); d.className = 'flip'; d.style.setProperty('--g', g);
+  d.innerHTML = `<div class="flip-in"><div class="face front"><div class="e">${e}</div><h3>${h}</h3></div><div class="face back">${txt}</div></div>`;
+  d.onclick = () => d.classList.toggle('on');
+  flips.appendChild(d);
+});
+
+/* ===== Подарок ===== */
+const fortunes = [
+  'В 14 тебя ждёт большое приключение, о котором ты будешь рассказывать годами 🗺️',
+  'Ты научишься чему-то настолько крутому, что все удивятся 🏆',
+  'Этот год принесёт тебе нового лучшего друга 🤜🤛',
+  'Одно из твоих тайных желаний сбудется раньше, чем ты думаешь ✨',
+  'Твоя смелость откроет двери, которые раньше были закрыты 🚪',
+  '14 — твоё счастливое число. Год будет легендарным! 🍀',
+  'Скоро тебя ждёт победа, которой ты будешь гордиться 🥇',
+  'Ты станешь сильнее, умнее и ещё круче, чем сейчас 💎'
+];
+const gift = document.getElementById('gift'), fortune = document.getElementById('fortune');
+gift.onclick = () => {
+  if (gift.classList.contains('open')) { gift.classList.remove('open'); return; }
+  gift.classList.add('open');
+  const r = gift.getBoundingClientRect();
+  firework(r.left + r.width / 2, r.top); confetti(80);
+  fortune.classList.remove('pop'); void fortune.offsetWidth;
+  fortune.textContent = pick(fortunes); fortune.classList.add('pop');
+};
+
+/* ===== Письмо (печатная машинка) ===== */
+const letterText = `Дорогой Акбаршох!
+
+Сегодня тебе 14 — и это очень классный возраст. Ты уже не маленький, но впереди ещё столько всего интересного!
+
+Оставайся таким же весёлым, добрым и смелым. Пробуй новое, не бойся ошибаться и всегда верь в себя — мы в тебя верим точно.
+
+С днём рождения! Пусть этот год будет самым лучшим 🎉💙`;
+let typed = false;
+function typeLetter() {
+  if (typed) return; typed = true;
+  const el = document.getElementById('letter'); let i = 0;
+  (function tick() {
+    el.textContent = letterText.slice(0, ++i);
+    if (i < letterText.length) setTimeout(tick, letterText[i - 1] === '\n' ? 250 : 35);
+  })();
+}
+
+/* ===== Шарики ===== */
+let popped = 0;
+function balloon() {
+  const b = document.createElement('div'); b.className = 'balloon';
+  b.style.setProperty('--c', pick(COLORS.slice(0, 6)));
+  b.style.left = rand(2, 92) + 'vw';
+  b.style.animationDuration = rand(9, 15) + 's';
+  b.onclick = e => {
+    popped++; document.getElementById('popped').textContent = popped;
+    const r = b.getBoundingClientRect();
+    for (let i = 0; i < 30; i++) {
+      const a = rand(0, Math.PI * 2), s = rand(1, 4);
+      P.push({ t: 'f', x: r.left + 31, y: r.top + 39, vx: Math.cos(a) * s, vy: Math.sin(a) * s, c: getComputedStyle(b).getPropertyValue('--c'), life: 1, d: .03 });
+    }
+    b.remove();
+    if (popped % 14 === 0) { show(4); cakeMsg.textContent = `🎈 ${popped} шариков! Ты чемпион!`; }
+  };
+  b.addEventListener('animationend', () => b.remove());
+  document.body.appendChild(b);
+}
+function startBalloons() { for (let i = 0; i < 5; i++) setTimeout(balloon, i * 400); setInterval(balloon, 1600); }
+
+/* ===== Искры за курсором ===== */
+let lastSp = 0;
+addEventListener('mousemove', e => {
+  if (performance.now() - lastSp < 45) return; lastSp = performance.now();
+  const s = document.createElement('div'); s.className = 'sparkle';
+  s.textContent = pick(['✨', '⭐', '💫', '🌟']);
+  s.style.left = e.clientX + 'px'; s.style.top = e.clientY + 'px';
+  document.body.appendChild(s); setTimeout(() => s.remove(), 900);
+});
+</script>
+</body>
+</html>
